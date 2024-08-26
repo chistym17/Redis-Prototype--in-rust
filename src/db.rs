@@ -19,8 +19,8 @@ impl Database {
         self.store.get(key)
     }
     
-    pub fn delete(&mut self, key: &str) -> Option<String> {
-        self.store.remove(key)
+    pub fn delete(&mut self, key: &str) -> bool {
+        self.store.remove(key).is_some()
     }
     
 }

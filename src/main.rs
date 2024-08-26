@@ -1,5 +1,7 @@
 mod db;
 mod server;
+mod functions;
+
 
 #[tokio::main]
 async fn main() {

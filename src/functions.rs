@@ -1,7 +1,11 @@
-fn handle_command(db:&Arc<Mutex<Database>>,command:&[u8])->String
+use std::sync::{Arc, Mutex};
+use crate::db::Database;
+
+
+pub fn handle_command(db:&Arc<Mutex<Database>>,command:&[u8])->String
 {
     let str=String::from_utf8_lossy(command);
-    let parts=str.split_whitespace().collect();
+    let parts:Vec<&str>=str.split_whitespace().collect();
     match parts.as_slice()
     {
         ["SET",key,value]=>{
@@ -20,7 +24,7 @@ fn handle_command(db:&Arc<Mutex<Database>>,command:&[u8])->String
 
         ["DEL", key] => {
             let mut db = db.lock().unwrap();
-            if db.del(key) {
+            if db.delete(key) {
                 "1\n".to_string()
             } else {
                 "0\n".to_string()
