@@ -1,6 +1,8 @@
 mod db;
 mod server;
 
-fn main() {
-    println!("Hello, world!");
+#[tokio::main]
+async fn main() {
+    println!("Starting the redis server...");
+    server::start_server().await;
 }
