@@ -10,8 +10,8 @@ pub async  fn start_server(){
 
    
 
-    let listener=TcpListener::bind("127.0.0.1:6379").unwrap();
-    println!("Server running on 127.0.0.1:6379");
+    let listener=TcpListener::bind("127.0.0.1:6380").unwrap();
+    println!("Server running on 127.0.0.1:6380");
 
     loop {
         let db = Arc::new(Mutex::new(Database::new()));
