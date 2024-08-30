@@ -38,6 +38,19 @@ impl Database {
             0 
         }
     }
+
+    pub fn rpush(&mut self,key: String,value: String)->usize{
+        let entry=self.store.entry(key).or_insert_with(||Value::List(VecDeque::new()));
+        if let Value::List(ref mut list)=entry{
+            list.push_back(value);
+            list.len()
+        }
+        else {
+            {
+                0
+            }
+        }
+    }
     
 }
 
