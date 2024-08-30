@@ -70,6 +70,31 @@ impl Database {
         }
     }
     
+   // SET 
+    pub fn sadd(&mut self, key: String, value: String) -> bool {
+        let entry = self.store.entry(key).or_insert_with(|| Value::Set(HashSet::new()));
+        if let Value::Set(ref mut set) = entry {
+            set.insert(value)
+        } else {
+            false 
+        }
+    }
+
+    pub fn srem(&mut self, key: String, value: &str) -> bool {
+        if let Some(Value::Set(ref mut set)) = self.store.get_mut(&key) {
+            set.remove(value)
+        } else {
+            false
+        }
+    }
+
+    pub fn smembers(&self, key: &str) -> Option<&HashSet<String>> {
+        if let Some(Value::Set(ref set)) = self.store.get(key) {
+            Some(set)
+        } else {
+            None
+        }
+    }
     
 }
 
