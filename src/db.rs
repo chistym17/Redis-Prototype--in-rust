@@ -51,6 +51,25 @@ impl Database {
             }
         }
     }
+
+    pub fn lpop(&mut self, key: &str) -> Option<String> {
+        if let Some(Value::List(ref mut list)) = self.store.get_mut(key) {
+            list.pop_front()
+        } else {
+            None
+        }
+    }
+
+    pub fn rpop(&mut self,key: &str)->Option<String>
+    {
+        if let Some(Value::List(ref mut list))=self.store.get_mut(key){
+            list.pop_back()
+
+        }else{
+            None
+        }
+    }
+    
     
 }
 

@@ -33,6 +33,37 @@ pub fn handle_command(db:&Arc<Mutex<Database>>,command:&[u8])->String
                 "0\n".to_string()
             }
         }
+        //List commands
+        ["LPUSH", key, value] => {
+            let mut db = db.lock().unwrap();
+            let len = db.lpush(key.to_string(), value.to_string());
+            format!("{}\n", len)
+        }
+        
+        ["RPUSH", key, value] => {
+            let mut db = db.lock().unwrap();
+            let len = db.rpush(key.to_string(), value.to_string());
+            format!("{}\n", len)
+        }
+        
+        ["LPOP", key] => {
+            let mut db = db.lock().unwrap();
+            match db.lpop(key) {
+                Some(value) => format!("{}\n", value),
+                None => "nil\n".to_string(),
+            }
+        }
+        
+        ["RPOP", key] => {
+            let mut db = db.lock().unwrap();
+            match db.rpop(key) {
+                Some(value) => format!("{}\n", value),
+                None => "nil\n".to_string(),
+            }
+        }
+        ////////////
+        
+        
 
         _ =>"ERR unknown command\n".to_string(),
         
