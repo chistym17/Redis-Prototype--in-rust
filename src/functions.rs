@@ -108,8 +108,8 @@ pub fn take_snaps(db:Arc<Mutex<Database>>,interval:Duration,file_path:String)
     });
 }
 
-fn load_latest_snapshot() -> Database {
-    match Database::load_snaps("db_snapshot.bin") {
+pub fn load_latest_snap(file_path: &str) -> Database {
+    match Database::load_snaps(file_path) {
         Ok(db) => db,
         Err(_) => {
             println!("No snapshot found, starting with an empty database.");
