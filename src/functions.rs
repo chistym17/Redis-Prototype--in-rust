@@ -1,9 +1,12 @@
 use std::sync::{Arc, Mutex};
 use crate::db::Database;
 use crate::db::Value;
+use std::thread;
+use std::time::Duration;
 
 pub fn handle_command(db:&Arc<Mutex<Database>>,command:&[u8])->String
 {
+
     let str=String::from_utf8_lossy(command);
     let parts:Vec<&str>=str.split_whitespace().collect();
     match parts.as_slice()
@@ -91,4 +94,26 @@ pub fn handle_command(db:&Arc<Mutex<Database>>,command:&[u8])->String
 
     }
 
+}
+
+pub fn take_snaps(db:Arc<Mutex<Database>>,interval:Duration,file_path:String)
+{
+    thread::spawn(move || {
+        loop{
+            thread::sleep(interval);
+            let datab=db.lock().unwrap();
+            datab.save_snaps(&file_path).expect("failed snap");
+            println!("Snapshot saved!");
+        }
+    });
+}
+
+fn load_latest_snapshot() -> Database {
+    match Database::load_snaps("db_snapshot.bin") {
+        Ok(db) => db,
+        Err(_) => {
+            println!("No snapshot found, starting with an empty database.");
+            Database::new()
+        }
+    }
 }

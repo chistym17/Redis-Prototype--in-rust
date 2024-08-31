@@ -1,11 +1,16 @@
 use std::collections::{HashMap,HashSet,VecDeque};
+use serde::{Serialize, Deserialize};
 
+use std::fs::File;
+use std::io::{Write, Read};
+
+#[derive(Serialize, Deserialize)]
 pub enum Value {
     String(String),
     List(VecDeque<String>),
     Set(HashSet<String>),
-    Hash(HashMap<String, String>),
 }
+#[derive(Serialize, Deserialize)]
 pub struct Database {
     store: HashMap<String, Value>,
 }
@@ -16,6 +21,25 @@ impl Database {
             store: HashMap::new(),
         }
     }
+
+    pub fn save_snaps(&self,file_path:&str)->std::io::Result<()>{
+        let data=bincode::serialize(self).unwrap();
+        let mut file=File::create(file_path)?;
+        file.write_all(&data)?;
+        Ok(())
+    }
+
+    pub fn load_snaps(file_path:&str)->std::io::Result<Self>{
+        let mut file=File::open(file_path)?;
+        let mut buffer=Vec::new();
+        file.read_to_end(&mut buffer)?;
+        let db=bincode::deserialize(&buffer).unwrap();
+        Ok(db)
+    }
+
+
+
+
 
     pub fn set(&mut self, key: String, value: Value) {
         self.store.insert(key, value);
