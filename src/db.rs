@@ -4,8 +4,8 @@ use serde::{Serialize, Deserialize};
 use std::fs::File;
 use std::io::{Write, Read};
 
-#[derive(Serialize, Deserialize)]
-pub enum Value {
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+    pub enum Value {
     String(String),
     List(VecDeque<String>),
     Set(HashSet<String>),
