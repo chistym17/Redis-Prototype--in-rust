@@ -21,6 +21,9 @@ impl Database {
             store: HashMap::new(),
         }
     }
+    pub fn is_empty(&self) -> bool {
+        self.store.is_empty()
+    }
 
     pub fn save_snaps(&self,file_path:&str)->std::io::Result<()>{
         let data=bincode::serialize(self).unwrap();
