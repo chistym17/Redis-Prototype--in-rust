@@ -7,7 +7,7 @@ async fn test_concurrency() {
     let db = Arc::new(Mutex::new(Database::new()));
     let mut handles = vec![];
 
-    for i in 0..10 {
+    for i in 0..100 {
         let db = Arc::clone(&db);
         let handle = tokio::spawn(async move {
             let key = format!("key{}", i);
